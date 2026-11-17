@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Services | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Services Registration</h2>
+
+    <form method="post" {% if is_editing %}action="{% url 'update_service' pk=editing_record.pk %}"{% else %}action="{% url 'add_service' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update service{% else %}Create service{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'services' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+
+    <h2>SERVICES TABLE</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ServiceId</th>
+                <th>ServiceName</th>
+                <th>Description</th>
+                <th>ServiceCost</th>
+                <th>Availability</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.service_id }}</td>
+                <td>{{ service.name }}</td>
+                <td>{{ service.description }}</td>
+                <td>{{ service.cost }}</td>
+                <td>{{ service.availability }}</td>
+                <td>
+                    <a href="{% url 'update_service' pk=service.pk %}">Edit</a>
+                    <form method="post" action="{% url 'delete_service' pk=service.pk %}" onsubmit="return confirm('Delete this service?');">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}<tr><td colspan="6">No services saved yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

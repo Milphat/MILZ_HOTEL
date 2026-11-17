@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Book a Room | MILZ GRAND HOTEL{% endblock %}
+{% block content %}
+<div class="form-page">
+  <div class="form-heading">
+    <span class="eyebrow">MAKE A RESERVATION</span>
+    <h1>Book your stay</h1>
+    <p>
+      Choose an available room and your dates. Your request is sent to the hotel
+      with status <strong>Pending</strong>. Staff will confirm or decline it —
+      the same way major booking platforms work with property partners.
+    </p>
+  </div>
+  <form method="post" class="hotel-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <div class="booking-fields">
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+        {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-gold btn-lg">Submit booking request</button>
+      <a class="btn btn-outline-dark" href="{% url 'my_bookings' %}">View my bookings</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

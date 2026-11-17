@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Bill Details | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Bill Details</h2>
+    <form method="post" {% if is_editing %}action="{% url 'update_bill_detail' pk=editing_record.pk %}"{% else %}action="{% url 'add_bill_detail' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update bill detail{% else %}Create bill detail{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'billdetails' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+    <h2>BILL DETAILS TABLE</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>BillDetailID</th>
+                <th>BillID</th>
+                <th>Service</th>
+                <th>Quantity</th>
+                <th>UnitPrice</th>
+                <th>TotalAmount</th>
+                <th>Actions</th>
+            </tr>
+                </thead>
+        <tbody>
+                        {% for detail in bill_details %}
+                        <tr>
+                                <td>{{ detail.detail_id }}</td>
+                                <td>{{ detail.bill.bill_id }}</td>
+                                <td>{{ detail.service.name }}</td>
+                                <td>{{ detail.quantity }}</td>
+                                <td>{{ detail.unit_price }}</td>
+                                <td>{{ detail.total_amount }}</td>
+                                <td>
+                                    <a href="{% url 'update_bill_detail' pk=detail.pk %}">Edit</a>
+                                    <form method="post" action="{% url 'delete_bill_detail' pk=detail.pk %}" onsubmit="return confirm('Delete this bill detail?');">
+                                        {% csrf_token %}
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
+                        </tr>
+                        {% empty %}<tr><td colspan="7">No bill details saved yet.</td></tr>
+                        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

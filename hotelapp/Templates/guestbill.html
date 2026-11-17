@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Guest Bills | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Guest Billing</h2>
+    <form method="post" {% if is_editing %}action="{% url 'update_guest_bill' pk=editing_record.pk %}"{% else %}action="{% url 'add_guest_bill' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update bill{% else %}Create bill{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'guestbill' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+    <h2>GUEST BILL TABLE</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>BillID</th>
+                <th>GuestID</th>
+                <th>ReservationID</th>
+                <th>TotalAmount</th>
+                <th>TaxAmount</th>
+                <th>Discount</th>
+                <th>FinalAmount</th>
+                <th>BillDate</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+                </thead>
+        <tbody>
+                        {% for bill in bills %}
+                        <tr>
+                                <td>{{ bill.bill_id }}</td>
+                                <td>{{ bill.guest.guest_id }}</td>
+                                <td>{{ bill.reservation.reservation_id }}</td>
+                                <td>{{ bill.total_amount }}</td>
+                                <td>{{ bill.tax }}</td>
+                                <td>{{ bill.discount }}</td>
+                                <td>{{ bill.final_amount }}</td>
+                                <td>{{ bill.bill_date|date:"Y-m-d" }}</td>
+                                <td>{{ bill.status }}</td>
+                                <td>
+                                    <a href="{% url 'update_guest_bill' pk=bill.pk %}">Edit</a>
+                                    <form method="post" action="{% url 'delete_guest_bill' pk=bill.pk %}" onsubmit="return confirm('Delete this bill?');">
+                                        {% csrf_token %}
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
+                        </tr>
+                        {% empty %}<tr><td colspan="10">No bills saved yet.</td></tr>
+                        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

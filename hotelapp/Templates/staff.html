@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Staff Registration</h2>
+    <form method="post" {% if is_editing %}action="{% url 'update_staff' pk=editing_record.pk %}"{% else %}action="{% url 'add_staff' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update staff member{% else %}Create staff member{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'staff' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+    <h2>STAFF TABLE</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>StaffId</th>
+                <th>StaffFirstName</th>
+                <th>StaffLastName</th>
+                <th>Gender</th>
+                <th>email</th>
+                <th>Salary</th>
+                <th>Contact</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in staff_members %}
+            <tr>
+                <td>{{ member.staff_id }}</td>
+                <td>{{ member.first_name }}</td>
+                <td>{{ member.last_name }}</td>
+                <td>{{ member.gender }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.salary }}</td>
+                <td>{{ member.contact }}</td>
+                <td>{{ member.role }}</td>
+                <td>
+                    <a href="{% url 'update_staff' pk=member.pk %}">Edit</a>
+                    <form method="post" action="{% url 'delete_staff' pk=member.pk %}" onsubmit="return confirm('Delete this staff member?');">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}<tr><td colspan="9">No staff records yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

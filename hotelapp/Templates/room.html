@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Rooms | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Room Registration</h2>
+
+    <form method="post" {% if is_editing %}action="{% url 'update_room' pk=editing_record.pk %}"{% else %}action="{% url 'add_room' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update room{% else %}Create room{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'room' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+
+    <h2>ROOM TABLE</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>RoomId</th>
+                <th>RoomTypeId</th>
+                <th>RoomNumber</th>
+                <th>Floor</th>
+                <th>RoomStatus</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room.room_id }}</td>
+                <td>{{ room.room_type.room_type_id }}</td>
+                <td>{{ room.room_number }}</td>
+                <td>{{ room.floor }}</td>
+                <td>{{ room.status }}</td>
+                <td>
+                    <a href="{% url 'update_room' pk=room.pk %}">Edit</a>
+                    <form method="post" action="{% url 'delete_room' pk=room.pk %}" onsubmit="return confirm('Delete this room?');">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}<tr><td colspan="6">No rooms saved yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

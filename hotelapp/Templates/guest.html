@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Guests | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Guest Registration</h2>
+    <form method="post" {% if is_editing %}action="{% url 'update_guest' pk=editing_record.pk %}"{% else %}action="{% url 'add_guest' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update guest{% else %}Create guest{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'guest' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+      <h2>GUEST TABLE</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>GuestId</th>
+                <th>GuestFirstName</th>
+                <th>GuestLastName</th>
+                <th>Gender</th>
+                <th>Contact</th>
+                <th>email</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for guest in guests %}
+            <tr>
+                <td>{{ guest.guest_id }}</td>
+                <td>{{ guest.first_name }}</td>
+                <td>{{ guest.last_name }}</td>
+                <td>{{ guest.gender }}</td>
+                <td>{{ guest.contact }}</td>
+                <td>{{ guest.email }}</td>
+                <td>{{ guest.address }}</td>
+                <td>
+                    <a href="{% url 'update_guest' pk=guest.pk %}">Edit</a>
+                    <form method="post" action="{% url 'delete_guest' pk=guest.pk %}" onsubmit="return confirm('Delete this guest?');">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}<tr><td colspan="8">No guest records yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

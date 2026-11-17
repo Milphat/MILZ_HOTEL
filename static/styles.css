@@ -1,0 +1,878 @@
+/* =========================================================
+   MILZ GRAND HOTEL — modern, high-visibility UI
+   ========================================================= */
+
+:root {
+  color-scheme: light;
+  --ink: #182b2a;
+  --muted: #5f736e;
+  --gold: #c79b52;
+  --gold-hover: #d5ad6d;
+  --deep: #173b38;
+  --deep-hover: #0f2a28;
+  --paper: #f6f7f4;
+  --white: #ffffff;
+  --line: #e0e6e2;
+  --success: #1e7a4a;
+  --danger: #b02a37;
+  --coral: #a64f3b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  color: var(--ink);
+  font-family: "Segoe UI", "Trebuchet MS", system-ui, sans-serif;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Navigation ---------- */
+.navigation {
+  background: var(--deep);
+  padding: 0.6rem 0;
+  box-shadow: 0 4px 18px rgba(23, 59, 56, 0.18);
+}
+
+.hotel-logo {
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  font-size: 1.05rem;
+  color: #fff !important;
+}
+
+.navigation .nav-link,
+.navigation .nav-button {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.45rem 0.9rem !important;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.navigation .nav-link:hover,
+.navigation .nav-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff !important;
+}
+
+.navigation .nav-highlight {
+  background: var(--gold) !important;
+  color: #172b28 !important;
+  border-color: var(--gold) !important;
+}
+
+.navigation .nav-highlight:hover {
+  background: var(--gold-hover) !important;
+  color: #172b28 !important;
+}
+
+.nav-logout {
+  margin: 0;
+}
+
+.nav-button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* ---------- Layout shell ---------- */
+.page-shell {
+  flex: 1;
+  padding-top: 2rem;
+  padding-bottom: 3.5rem;
+  max-width: 1140px;
+}
+
+.site-footer {
+  text-align: center;
+  padding: 1.25rem;
+  color: #c5d4ce;
+  background: var(--deep);
+  margin-top: auto;
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.messages {
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Buttons (high visibility) ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 42px;
+  padding: 0.55rem 1.35rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none !important;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-lg {
+  min-height: 50px;
+  padding: 0.75rem 1.75rem;
+  font-size: 1.05rem;
+}
+
+.btn-sm {
+  min-height: 32px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.btn-gold {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #172b28 !important;
+}
+
+.btn-gold:hover {
+  background: var(--gold-hover) !important;
+  border-color: var(--gold-hover) !important;
+  color: #172b28 !important;
+}
+
+.btn-outline-light {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  color: #fff !important;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: #fff !important;
+  color: #fff !important;
+}
+
+.btn-outline-dark {
+  background: transparent !important;
+  border-color: var(--deep) !important;
+  color: var(--deep) !important;
+}
+
+.btn-outline-dark:hover {
+  background: var(--deep) !important;
+  color: #fff !important;
+}
+
+.btn-success {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+  color: #fff !important;
+}
+
+.btn-outline-danger {
+  background: transparent !important;
+  border-color: var(--danger) !important;
+  color: var(--danger) !important;
+}
+
+.btn-outline-danger:hover {
+  background: var(--danger) !important;
+  color: #fff !important;
+}
+
+.btn-outline-secondary {
+  background: transparent !important;
+  border-color: #88948f !important;
+  color: #4a5552 !important;
+}
+
+/* ---------- Hero ---------- */
+.hero-panel {
+  background: linear-gradient(125deg, #12332f 0%, #1f4a44 55%, #2a5c54 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 3.25rem 6%;
+  display: grid;
+  grid-template-columns: 1.55fr 0.7fr;
+  gap: 2rem;
+  align-items: center;
+  box-shadow: 0 18px 48px rgba(18, 50, 45, 0.22);
+  margin-bottom: 2.5rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.hero-copy h1 {
+  font-size: clamp(1.9rem, 4.2vw, 2.85rem);
+  font-weight: 750;
+  line-height: 1.15;
+  margin: 0.6rem 0 1rem;
+  color: #fff;
+  text-align: left;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.hero-lead {
+  max-width: 34rem;
+  color: #d4e4de;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0 0 1.6rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.hero-side {
+  text-align: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  padding-left: 1.5rem;
+}
+
+.hero-mark {
+  width: 140px;
+  height: 140px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #f5d8a5;
+}
+
+.hero-side p {
+  color: #d4e4de;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+/* ---------- How it works ---------- */
+.how-it-works,
+.featured-rooms {
+  margin-bottom: 2.75rem;
+}
+
+.section-intro {
+  margin-bottom: 1.35rem;
+}
+
+.section-intro h2 {
+  font-size: 1.65rem;
+  margin: 0.35rem 0 0.4rem;
+  text-align: left;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.section-intro p {
+  color: var(--muted);
+  margin: 0;
+  max-width: 40rem;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+}
+
+.intro-grid article {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.4rem 1.25rem;
+  box-shadow: 0 4px 14px rgba(23, 59, 56, 0.05);
+}
+
+.step-num {
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}
+
+.intro-grid h3 {
+  font-size: 1.1rem;
+  margin: 0.55rem 0 0.4rem;
+  color: var(--ink);
+}
+
+.intro-grid p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* ---------- Featured rooms ---------- */
+.room-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.room-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(23, 59, 56, 0.05);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(23, 59, 56, 0.1);
+}
+
+.room-card-body {
+  padding: 1.25rem;
+}
+
+.room-card h3 {
+  font-size: 1.15rem;
+  margin: 0 0 0.4rem;
+  color: var(--ink);
+}
+
+.room-desc {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 0.9rem;
+  min-height: 2.8em;
+}
+
+.room-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.price {
+  color: var(--deep);
+  font-size: 1.15rem;
+}
+
+.price small {
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.cta-center {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ---------- Role split cards ---------- */
+.role-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.role-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.6rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(23, 59, 56, 0.05);
+}
+
+.role-card h3 {
+  font-size: 1.25rem;
+  margin: 0.4rem 0 0.9rem;
+  color: var(--ink);
+}
+
+.role-card ul {
+  margin: 0 0 1.25rem;
+  padding-left: 1.15rem;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.role-card li {
+  margin-bottom: 0.25rem;
+}
+
+.admin-role {
+  border-top: 4px solid var(--deep);
+}
+
+.guest-role {
+  border-top: 4px solid var(--gold);
+}
+
+/* ---------- Dashboard ---------- */
+.dashboard-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.6rem;
+}
+
+.dashboard-heading h1 {
+  font-size: 1.9rem;
+  margin: 0.3rem 0 0.35rem;
+  text-align: left;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.dashboard-heading p {
+  color: var(--muted);
+  margin: 0;
+  max-width: 36rem;
+  font-size: 0.95rem;
+}
+
+.admin-chip {
+  display: inline-block;
+  background: #e4f0ea;
+  color: #1f5a48;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.15rem 1.2rem;
+}
+
+.stat-card span,
+.stat-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 1.9rem;
+  margin: 0.35rem 0;
+  color: var(--ink);
+}
+
+.management-section {
+  margin-top: 2.25rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-heading h2 {
+  font-size: 1.35rem;
+  margin: 0.25rem 0 0;
+  text-align: left;
+}
+
+.management-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.management-grid a {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.15rem 1.1rem;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.management-grid a:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(23, 59, 56, 0.08);
+}
+
+.management-grid b,
+.management-grid span {
+  display: block;
+}
+
+.management-grid span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+}
+
+/* ---------- Tables ---------- */
+.dashboard-table {
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  width: 100%;
+}
+
+.dashboard-table thead th {
+  background: #edf2ef;
+  border: 0;
+  color: #4a5e58;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 0.75rem 0.9rem;
+  white-space: nowrap;
+}
+
+.dashboard-table td {
+  vertical-align: middle;
+  padding: 0.7rem 0.9rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.status-pill {
+  display: inline-block;
+  background: #e8f1ec;
+  color: #245446;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.action-cell {
+  white-space: nowrap;
+}
+
+.inline-form {
+  display: inline-block;
+  margin: 0 0.15rem 0.2rem 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  width: auto;
+}
+
+.inline-form button {
+  margin: 0;
+}
+
+/* ---------- Forms ---------- */
+.form-page {
+  max-width: 920px;
+  margin: 0 auto 2rem;
+}
+
+.form-heading {
+  margin-bottom: 1.25rem;
+}
+
+.form-heading h1,
+.form-heading h2 {
+  text-align: left;
+  margin: 0.3rem 0 0.4rem;
+}
+
+.hotel-form {
+  background: var(--white);
+  padding: 1.6rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(23, 59, 56, 0.05);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.booking-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.35rem 1.25rem;
+}
+
+.hotel-form label {
+  font-weight: 650;
+  display: block;
+  width: auto;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.hotel-form input,
+.hotel-form select,
+.hotel-form textarea {
+  width: 100%;
+  min-height: 42px;
+  margin: 0 0 0.35rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c5d0ca;
+  border-radius: 8px;
+  background: #fbfcfb;
+  color: var(--ink);
+  font: inherit;
+}
+
+.hotel-form input:focus,
+.hotel-form select:focus,
+.hotel-form textarea:focus {
+  border-color: var(--deep);
+  outline: 3px solid rgba(23, 59, 56, 0.12);
+}
+
+.field-error {
+  display: block;
+  color: var(--danger);
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+/* Legacy form styles still used by older admin pages */
+form {
+  width: min(100%, 720px);
+  margin: 1rem auto 2rem;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 4px 16px rgba(23, 59, 56, 0.05);
+  text-align: left;
+}
+
+form label {
+  display: inline-block;
+  width: 150px;
+  margin: 0.4rem 0.6rem 0.4rem 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+form input,
+form select,
+form textarea {
+  width: min(100%, 320px);
+  min-height: 40px;
+  margin: 0.25rem 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #c5d0ca;
+  border-radius: 6px;
+  background: #fbfcfb;
+  color: var(--ink);
+  font: inherit;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: var(--deep);
+  outline: 3px solid rgba(23, 59, 56, 0.12);
+}
+
+button {
+  min-height: 40px;
+  margin: 0.6rem 0.5rem 0 0;
+  padding: 0.5rem 1.1rem;
+  border: 2px solid var(--deep);
+  border-radius: 8px;
+  background: var(--deep);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.12s;
+}
+
+button:hover {
+  background: var(--deep-hover);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button[type="reset"] {
+  border-color: var(--coral);
+  background: var(--coral);
+}
+
+button[type="reset"]:hover {
+  background: #843d2e;
+}
+
+table {
+  display: block;
+  width: min(100%, 1280px);
+  margin: 1rem auto 2rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-collapse: collapse;
+  background: var(--white);
+  box-shadow: 0 4px 14px rgba(23, 59, 56, 0.06);
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 0.7rem 0.9rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+th {
+  background: var(--deep);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+td {
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+tbody tr:nth-child(even) td {
+  background: #f2f6f3;
+}
+
+tbody tr:hover td {
+  background: #e6efea;
+}
+
+.Logincentering {
+  max-width: 480px;
+  margin: 2.5rem auto;
+  text-align: center;
+}
+
+.LoginStyle {
+  background: var(--white);
+  padding: 1.6rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+
+.LoginStyle input {
+  margin-bottom: 0.6rem;
+  width: 100%;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .hero-panel {
+    grid-template-columns: 1fr;
+    padding: 2.25rem 1.5rem;
+  }
+
+  .hero-side {
+    display: none;
+  }
+
+  .intro-grid,
+  .stats-grid,
+  .management-grid,
+  .role-split,
+  .booking-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-shell {
+    padding-top: 1.25rem;
+  }
+
+  .hero-copy h1 {
+    font-size: 1.7rem;
+  }
+
+  .btn-lg {
+    width: 100%;
+  }
+}

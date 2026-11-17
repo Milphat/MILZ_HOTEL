@@ -1,0 +1,436 @@
+{% extends 'base.html' %}
+{% block title %}Welcome | MILZ GRAND HOTEL{% endblock %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+  /* Everything is scoped under .mgh so it cannot clash with base.html or Bootstrap */
+  .mgh {
+    --ink: #0f2a2e;
+    --ink-soft: #17393e;
+    --brass: #c49a47;
+    --brass-deep: #8f6b28;
+    --paper: #f3f6f5;
+    --card: #ffffff;
+    --line: #dce4e2;
+    --muted: #556568;
+    --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --body: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+    font-family: var(--body);
+    color: var(--ink);
+    line-height: 1.65;
+    padding: 1.5rem 0 3.5rem;
+  }
+  .mgh *, .mgh *::before, .mgh *::after { box-sizing: border-box; }
+  .mgh h1, .mgh h2, .mgh h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    color: inherit;
+  }
+  .mgh p { margin: 0; }
+
+  /* Small labels above headings: sentence case, with a short brass rule */
+  .mgh .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: .9rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--brass-deep);
+    margin-bottom: 1rem;
+  }
+  .mgh .eyebrow::before {
+    content: "";
+    width: 1.6rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .mgh .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .7rem 1.35rem;
+    border-radius: 10px;
+    border: 1.5px solid transparent;
+    font-family: var(--body);
+    font-size: .98rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+  }
+  .mgh .btn-lg { padding: .9rem 1.7rem; font-size: 1.02rem; }
+  .mgh .btn-gold { background: var(--brass); color: var(--ink); border-color: var(--brass); }
+  .mgh .btn-gold:hover { background: #d4aa58; border-color: #d4aa58; color: var(--ink); }
+  .mgh .btn-outline-light { color: #fff; border-color: rgba(255,255,255,.45); background: transparent; }
+  .mgh .btn-outline-light:hover { background: rgba(255,255,255,.12); border-color: #fff; color: #fff; }
+  .mgh .btn-outline-dark { color: #fff; border-color: rgba(255,255,255,.45); background: transparent; }
+  .mgh .btn-outline-dark:hover { background: #fff; color: var(--ink); border-color: #fff; }
+  .mgh .btn:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+
+  /* ---------- Hero ---------- */
+  .mgh .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, .8fr);
+    align-items: center;
+    gap: 2.5rem;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    border-radius: 24px;
+    color: #fff;
+    background:
+      radial-gradient(900px 400px at 85% -10%, rgba(196,154,71,.22), transparent 60%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 22px),
+      var(--ink);
+  }
+  .mgh .hero-panel .eyebrow { color: var(--brass); }
+  .mgh .hero-copy h1 {
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
+    letter-spacing: -.01em;
+  }
+  .mgh .hero-lead {
+    margin-top: 1.3rem;
+    max-width: 54ch;
+    font-size: 1.08rem;
+    color: rgba(255,255,255,.78);
+  }
+  .mgh .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem;
+    margin-top: 2rem;
+  }
+
+  /* Hero side: a brass room-key tag */
+  .mgh .hero-side {
+    position: relative;
+    justify-self: center;
+    width: min(230px, 100%);
+    padding: 3.6rem 1.5rem 2rem;
+    text-align: center;
+    color: var(--ink);
+    background: linear-gradient(160deg, #dcb869 0%, #b88e3d 100%);
+    border-radius: 22px;
+    transform: rotate(3deg);
+    box-shadow: 0 24px 40px -18px rgba(0,0,0,.55);
+  }
+  .mgh .hero-side::before {          /* key ring hole */
+    content: "";
+    position: absolute;
+    top: 1.2rem;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    margin-left: -9px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,.6);
+  }
+  .mgh .hero-side::after {           /* engraved inner border */
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px solid rgba(15,42,46,.35);
+    border-radius: 15px;
+    pointer-events: none;
+  }
+  .mgh .hero-mark {
+    font-family: var(--display);
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    line-height: 1;
+  }
+  .mgh .hero-side p {
+    margin-top: .8rem;
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  /* ---------- Section headings ---------- */
+  .mgh .how-it-works,
+  .mgh .featured-rooms,
+  .mgh .role-split { margin-top: clamp(3rem, 6vw, 5rem); }
+
+  .mgh .section-intro { margin-bottom: 2rem; max-width: 62ch; }
+  .mgh .section-intro h2 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
+  .mgh .section-intro p { margin-top: .8rem; color: var(--muted); }
+
+  /* ---------- How booking works (a real sequence, so numbered) ---------- */
+  .mgh .intro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .mgh .intro-grid article {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.6rem;
+  }
+  .mgh .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--brass);
+    font-family: var(--display);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .mgh .intro-grid h3 { font-size: 1.5rem; margin-bottom: .5rem; }
+  .mgh .intro-grid p { color: var(--muted); font-size: .98rem; }
+  .mgh .intro-grid strong { color: var(--ink); }
+
+  /* ---------- Rooms ---------- */
+  .mgh .room-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .mgh .room-card {
+    display: flex;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--brass);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .mgh .room-card-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1.5rem;
+  }
+  .mgh .room-card h3 { font-size: 1.7rem; }
+  .mgh .room-desc {
+    flex: 1;
+    margin-top: .6rem;
+    color: var(--muted);
+    font-size: .96rem;
+  }
+  .mgh .room-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .mgh .room-meta span {
+    padding: .25rem .75rem;
+    border-radius: 999px;
+    background: var(--paper);
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .mgh .price {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .mgh .price small {
+    font-family: var(--body);
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .mgh .cta-center { margin-top: 2rem; text-align: center; }
+  .mgh .cta-center .btn-gold { box-shadow: 0 8px 18px -10px rgba(143,107,40,.8); }
+
+  /* ---------- Guests vs staff ---------- */
+  .mgh .role-split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .mgh .role-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(1.6rem, 3vw, 2.4rem);
+    border-radius: 20px;
+  }
+  .mgh .role-card h3 { font-size: 1.9rem; margin-bottom: 1.1rem; }
+  .mgh .role-card ul {
+    flex: 1;
+    list-style: none;
+    margin: 0 0 1.6rem;
+    padding: 0;
+  }
+  .mgh .role-card li {
+    position: relative;
+    padding-left: 1.7rem;
+    margin-bottom: .6rem;
+    font-size: .98rem;
+  }
+  .mgh .role-card li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 700;
+    color: var(--brass-deep);
+  }
+  .mgh .guest-role { background: var(--card); border: 1px solid var(--line); }
+  .mgh .guest-role li { color: var(--muted); }
+  .mgh .admin-role { background: var(--ink); color: #fff; }
+  .mgh .admin-role .eyebrow { color: var(--brass); }
+  .mgh .admin-role li { color: rgba(255,255,255,.8); }
+  .mgh .admin-role li::before { color: var(--brass); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 880px) {
+    .mgh .hero-panel { grid-template-columns: 1fr; }
+    .mgh .hero-side { order: -1; justify-self: start; width: 190px; padding-top: 3.2rem; }
+    .mgh .intro-grid,
+    .mgh .role-split { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .mgh .hero-actions .btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mgh .btn { transition: none; }
+  }
+</style>
+
+<div class="mgh">
+
+<section class="hero-panel">
+  <div class="hero-copy">
+    <span class="eyebrow">MILZ GRAND HOTEL</span>
+    <h1>Find your perfect stay.<br>Book with confidence.</h1>
+    <p class="hero-lead">
+      Browse available rooms, choose your dates and send a reservation request.
+      Our team reviews and confirms every booking — just like a professional hotel booking platform.
+    </p>
+    <div class="hero-actions">
+      {% if user.is_authenticated %}
+        {% if user.is_staff %}
+          <a class="btn btn-gold btn-lg" href="{% url 'admin_dashboard' %}">Open Administrator Dashboard</a>
+          <a class="btn btn-outline-light btn-lg" href="{% url 'reservation' %}">Review pending bookings</a>
+        {% else %}
+          <a class="btn btn-gold btn-lg" href="{% url 'customer_booking' %}">Explore &amp; book a room</a>
+          <a class="btn btn-outline-light btn-lg" href="{% url 'my_bookings' %}">My bookings</a>
+        {% endif %}
+      {% else %}
+        <a class="btn btn-gold btn-lg" href="{% url 'login' %}">Sign in to book</a>
+        <a class="btn btn-outline-light btn-lg" href="{% url 'register' %}">Create free account</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero-side">
+    <div class="hero-mark">MGH</div>
+    <p>Stay. Relax. Feel at home.</p>
+  </div>
+</section>
+
+<section class="how-it-works">
+  <div class="section-intro">
+    <span class="eyebrow">How booking works</span>
+    <h2>Simple, transparent and controlled by the hotel</h2>
+  </div>
+  <div class="intro-grid">
+    <article>
+      <span class="step-num">1</span>
+      <h3>Guest chooses a room</h3>
+      <p>Registered guests browse available rooms and select the dates that suit their stay.</p>
+    </article>
+    <article>
+      <span class="step-num">2</span>
+      <h3>Request is submitted</h3>
+      <p>The booking is created with status <strong>Pending</strong>. Nothing is final until the hotel confirms it.</p>
+    </article>
+    <article>
+      <span class="step-num">3</span>
+      <h3>Admin confirms</h3>
+      <p>Hotel staff review the request, manage room inventory and confirm or cancel the reservation.</p>
+    </article>
+  </div>
+</section>
+
+{% if featured_room_types %}
+<section class="featured-rooms">
+  <div class="section-intro">
+    <span class="eyebrow">Rooms &amp; rates</span>
+    <h2>Popular room types</h2>
+    <p>These categories are managed by the hotel administrator. Guests can only book rooms that are currently marked available.</p>
+  </div>
+  <div class="room-type-grid">
+    {% for rt in featured_room_types %}
+    <article class="room-card">
+      <div class="room-card-body">
+        <h3>{{ rt.name }}</h3>
+        <p class="room-desc">{{ rt.description|truncatewords:22 }}</p>
+        <div class="room-meta">
+          <span>Up to {{ rt.capacity }} guest{{ rt.capacity|pluralize }}</span>
+          <strong class="price">{{ rt.price_per_night }} <small>/ night</small></strong>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="cta-center">
+    {% if user.is_authenticated and not user.is_staff %}
+      <a class="btn btn-gold btn-lg" href="{% url 'customer_booking' %}">Book a room now</a>
+    {% elif not user.is_authenticated %}
+      <a class="btn btn-gold btn-lg" href="{% url 'login' %}">Sign in to start booking</a>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+<section class="role-split">
+  <div class="role-card guest-role">
+    <span class="eyebrow">For guests</span>
+    <h3>Book like on Booking.com</h3>
+    <ul>
+      <li>Create an account and manage your profile</li>
+      <li>Request rooms that are currently available</li>
+      <li>Track status: Pending → Confirmed / Cancelled</li>
+      <li>View all your past and upcoming stays</li>
+    </ul>
+    {% if not user.is_authenticated %}
+      <a class="btn btn-gold" href="{% url 'register' %}">Create guest account</a>
+    {% elif not user.is_staff %}
+      <a class="btn btn-gold" href="{% url 'customer_booking' %}">Go to booking</a>
+    {% endif %}
+  </div>
+  <div class="role-card admin-role">
+    <span class="eyebrow">For hotel staff</span>
+    <h3>Full operational control</h3>
+    <ul>
+      <li>Add and manage rooms &amp; room types</li>
+      <li>Confirm or cancel guest booking requests</li>
+      <li>Handle staff, services, bills and payments</li>
+      <li>Never book rooms as a customer — you oversee them</li>
+    </ul>
+    {% if user.is_staff %}
+      <a class="btn btn-outline-dark" href="{% url 'admin_dashboard' %}">Open dashboard</a>
+    {% else %}
+      <a class="btn btn-outline-dark" href="{% url 'login' %}">Staff sign in</a>
+    {% endif %}
+  </div>
+</section>
+
+</div>
+
+{% endblock %}

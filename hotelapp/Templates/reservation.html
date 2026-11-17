@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservations | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+<div class="dashboard-heading">
+  <div>
+    <span class="eyebrow">HOTEL OPERATIONS</span>
+    <h1>Reservations</h1>
+    <p>
+      Guests submit booking requests. You confirm or cancel them here.
+      Only confirmed stays occupy rooms for guests.
+    </p>
+  </div>
+  <a class="btn btn-outline-dark" href="{% url 'admin_dashboard' %}">← Dashboard</a>
+</div>
+
+<div class="form-page admin-form-block">
+  <div class="form-heading">
+    <span class="eyebrow">{% if is_editing %}EDIT{% else %}CREATE{% endif %}</span>
+    <h2>{% if is_editing %}Update reservation{% else %}Add reservation (admin override){% endif %}</h2>
+    <p class="text-muted small">
+      Prefer letting guests book themselves. Use this form only when you need to create or correct a record manually.
+    </p>
+  </div>
+  <form method="post"
+        {% if is_editing %}action="{% url 'update_reservation' pk=editing_record.pk %}"{% else %}action="{% url 'add_reservation' %}"{% endif %}
+        novalidate class="hotel-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-gold">
+        {% if is_editing %}Update reservation{% else %}Create reservation{% endif %}
+      </button>
+      {% if is_editing %}
+        <a class="btn btn-outline-dark" href="{% url 'reservation' %}">Cancel editing</a>
+      {% else %}
+        <button type="reset" class="btn btn-outline-dark">Clear</button>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<section class="management-section">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">ALL BOOKINGS</span>
+      <h2>Reservation list</h2>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table dashboard-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Guest</th>
+          <th>Room</th>
+          <th>Booked on</th>
+          <th>Stay</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reservation in reservations %}
+        <tr>
+          <td><strong>{{ reservation.reservation_id }}</strong></td>
+          <td>{{ reservation.guest.first_name }} {{ reservation.guest.last_name }}</td>
+          <td>Room {{ reservation.room.room_number }}</td>
+          <td>{{ reservation.reservation_date|date:"Y-m-d" }}</td>
+          <td>{{ reservation.check_in_date|date:"Y-m-d" }} → {{ reservation.check_out_date|date:"Y-m-d" }}</td>
+          <td>
+            <span class="status-pill status-{{ reservation.status|lower }}">{{ reservation.status }}</span>
+          </td>
+          <td class="action-cell">
+            {% if reservation.status == "Pending" %}
+              <form method="post" action="{% url 'confirm_reservation' pk=reservation.pk %}" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-success">Confirm</button>
+              </form>
+              <form method="post" action="{% url 'cancel_reservation_admin' pk=reservation.pk %}" class="inline-form"
+                    onsubmit="return confirm('Cancel this pending booking?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+              </form>
+            {% elif reservation.status == "Confirmed" %}
+              <form method="post" action="{% url 'cancel_reservation_admin' pk=reservation.pk %}" class="inline-form"
+                    onsubmit="return confirm('Cancel this confirmed booking and free the room?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+              </form>
+            {% endif %}
+            <a class="btn btn-sm btn-outline-dark" href="{% url 'update_reservation' pk=reservation.pk %}">Edit</a>
+            <form method="post" action="{% url 'delete_reservation' pk=reservation.pk %}" class="inline-form"
+                  onsubmit="return confirm('Permanently delete this reservation record?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-secondary">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7">No reservations yet. Guests will appear here after they submit a booking request.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Room Types | MILZ GRAND HOTEL{% endblock %}
+
+{% block content %}
+    <h2>Room Type Registration</h2>
+
+    <form method="post" {% if is_editing %}action="{% url 'update_room_type' pk=editing_record.pk %}"{% else %}action="{% url 'add_room_type' %}"{% endif %} novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if is_editing %}Update room type{% else %}Create room type{% endif %}</button>
+        {% if is_editing %}<a href="{% url 'roomtype' %}">Cancel editing</a>{% else %}<button type="reset">Clear</button>{% endif %}
+    </form>
+
+    <h2>ROOM TYPE TABLE</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>RoomTypeId</th>
+                <th>RoomTypeName</th>
+                <th>Description</th>
+                <th>Capacity</th>
+                <th>PricePerNight</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for room_type in room_types %}
+            <tr>
+                <td>{{ room_type.room_type_id }}</td>
+                <td>{{ room_type.name }}</td>
+                <td>{{ room_type.description }}</td>
+                <td>{{ room_type.capacity }}</td>
+                <td>{{ room_type.price_per_night }}</td>
+                <td>
+                    <a href="{% url 'update_room_type' pk=room_type.pk %}">Edit</a>
+                    <form method="post" action="{% url 'delete_room_type' pk=room_type.pk %}" onsubmit="return confirm('Delete this room type?');">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}<tr><td colspan="6">No room types saved yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

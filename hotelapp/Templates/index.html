@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | MILZ GRAND HOTEL{% endblock %}
+
+{% block site_header %}{% endblock %}
+
+{% block content %}
+    <div class="Logincentering">
+        <h2>Hotel Sign In</h2>
+        <div class="LoginStyle">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+
+                {% if error %}
+                <p class="text-danger">{{ error }}</p>
+                {% endif %}
+
+                <p>
+                    <label for="id_username">Username:</label>
+                    <input type="text" name="username" class="form-control" placeholder="Username" autocomplete="username" maxlength="150" required id="id_username">
+                </p>
+                <p>
+                    <label for="id_password">Password:</label>
+                    <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="current-password" required id="id_password">
+                </p>
+                <button type="submit">Login</button>
+            </form>
+            <p>New to MILZ GRAND HOTEL? <a href="{% url 'register' %}">Create an account</a></p>
+        </div>
+    </div>
+{% endblock %}

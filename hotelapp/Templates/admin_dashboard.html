@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+{% block title %}Administrator Dashboard | MILZ GRAND HOTEL{% endblock %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+  /* Everything is scoped under .mgh so it cannot clash with base.html or Bootstrap */
+  .mgh {
+    --ink: #0f2a2e;
+    --ink-soft: #17393e;
+    --brass: #c49a47;
+    --brass-deep: #8f6b28;
+    --paper: #f3f6f5;
+    --card: #ffffff;
+    --line: #dce4e2;
+    --muted: #556568;
+    --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --body: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+    font-family: var(--body);
+    color: var(--ink);
+    line-height: 1.6;
+    padding: 1.5rem 0 3.5rem;
+  }
+  .mgh *, .mgh *::before, .mgh *::after { box-sizing: border-box; }
+  .mgh h1, .mgh h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+    color: inherit;
+  }
+  .mgh p { margin: 0; }
+
+  .mgh .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .8rem;
+    font-size: .9rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--brass-deep);
+  }
+  .mgh .eyebrow::before {
+    content: "";
+    width: 1.6rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .mgh .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .7rem 1.35rem;
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    font-family: var(--body);
+    font-size: .98rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+  }
+  .mgh .btn-sm { padding: .5rem 1rem; font-size: .88rem; }
+  .mgh .btn-gold { background: var(--brass); border-color: var(--brass); color: var(--ink); }
+  .mgh .btn-gold:hover { background: #d4aa58; border-color: #d4aa58; color: var(--ink); }
+  .mgh .btn-outline-dark { background: transparent; border-color: var(--ink); color: var(--ink); }
+  .mgh .btn-outline-dark:hover { background: var(--ink); color: #fff; }
+  .mgh .btn:focus-visible,
+  .mgh .management-grid a:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+
+  /* ---------- Page heading ---------- */
+  .mgh .dashboard-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.2rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .mgh .dashboard-heading h1 { font-size: clamp(2.1rem, 4.5vw, 3.1rem); }
+  .mgh .dashboard-heading p {
+    margin-top: .8rem;
+    max-width: 62ch;
+    color: var(--muted);
+  }
+  .mgh .admin-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--brass);
+    font-size: .88rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .mgh .admin-chip::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brass);
+  }
+
+  /* ---------- Pending alert ---------- */
+  .mgh .alert {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem .8rem;
+    margin: 1.6rem 0 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid #ecd28a;
+    border-left: 5px solid var(--brass);
+    border-radius: 12px;
+    background: #fff8e6;
+    color: #5a4410;
+  }
+  .mgh .alert strong { color: var(--ink); }
+  .mgh .alert .btn { margin-left: auto; }
+
+  /* ---------- Stats: one connected panel ---------- */
+  .mgh .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 1.8rem;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--line);
+  }
+  .mgh .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    padding: 1.4rem 1.6rem;
+    background: var(--card);
+  }
+  .mgh .stat-card span { font-size: .92rem; font-weight: 600; color: var(--muted); }
+  .mgh .stat-card strong {
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+  .mgh .stat-card small { font-size: .85rem; color: var(--muted); }
+
+  /* ---------- Sections ---------- */
+  .mgh .management-section { margin-top: clamp(2.5rem, 5vw, 3.8rem); }
+  .mgh .section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .mgh .section-heading h2 { font-size: clamp(1.7rem, 3vw, 2.2rem); }
+  .mgh .section-heading .eyebrow { margin-bottom: .6rem; }
+
+  /* ---------- Management links ---------- */
+  .mgh .management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  .mgh .management-grid a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: 1.2rem 3rem 1.2rem 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+  }
+  .mgh .management-grid a::after {
+    content: "\203A";
+    position: absolute;
+    right: 1.3rem;
+    top: 50%;
+    transform: translateY(-52%);
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--brass);
+  }
+  .mgh .management-grid a:hover {
+    border-color: var(--brass);
+    background: #fffdf8;
+    transform: translateY(-2px);
+  }
+  .mgh .management-grid b { font-size: 1.05rem; font-weight: 700; }
+  .mgh .management-grid span { font-size: .9rem; color: var(--muted); }
+
+  /* ---------- Reservations table ---------- */
+  .mgh .table-responsive {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+  }
+  .mgh .dashboard-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    font-size: .95rem;
+    color: var(--ink);
+  }
+  .mgh .dashboard-table thead th {
+    padding: .9rem 1.2rem;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    font-size: .85rem;
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+    color: var(--muted);
+  }
+  .mgh .dashboard-table tbody td {
+    padding: 1rem 1.2rem;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+    background: transparent;
+    color: var(--ink);
+  }
+  .mgh .dashboard-table tbody tr:last-child td { border-bottom: 0; }
+  .mgh .dashboard-table tbody tr:hover td { background: #fafbfa; }
+  .mgh .dashboard-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .mgh .dashboard-table td[colspan] { padding: 2rem 1.2rem; text-align: center; color: var(--muted); }
+
+  .mgh .status-pill {
+    display: inline-block;
+    padding: .2rem .75rem;
+    border-radius: 999px;
+    background: #e9eeed;
+    color: var(--ink-soft);
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .mgh .status-pending   { background: #fdf0cc; color: #7a5a06; }
+  .mgh .status-confirmed { background: #dcf1e3; color: #1d6a3a; }
+  .mgh .status-cancelled,
+  .mgh .status-canceled  { background: #fbe0de; color: #9b2a24; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 760px) {
+    .mgh .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mgh .alert .btn { margin-left: 0; }
+  }
+  @media (max-width: 440px) {
+    .mgh .stats-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mgh .btn, .mgh .management-grid a { transition: none; }
+    .mgh .management-grid a:hover { transform: none; }
+  }
+</style>
+
+<div class="mgh">
+
+<div class="dashboard-heading">
+  <div>
+    <span class="eyebrow">Hotel operations</span>
+    <h1>Administrator dashboard</h1>
+    <p>
+      You control inventory, confirm guest bookings and manage bills.
+      You do not place bookings as a customer — guests do that themselves.
+    </p>
+  </div>
+  <span class="admin-chip">Administrator</span>
+</div>
+
+{% if pending_reservations %}
+<div class="alert alert-warning">
+  <strong>{{ pending_reservations }} pending booking{{ pending_reservations|pluralize }}</strong>
+  need your attention.
+  <a class="btn btn-sm btn-gold" href="{% url 'reservation' %}">Review &amp; confirm</a>
+</div>
+{% endif %}
+
+<div class="stats-grid">
+  <div class="stat-card"><span>Total rooms</span><strong>{{ room_count }}</strong><small>{{ available_rooms }} currently marked available</small></div>
+  <div class="stat-card"><span>Reservations</span><strong>{{ reservation_count }}</strong><small>{{ pending_reservations }} pending requests</small></div>
+  <div class="stat-card"><span>Guests</span><strong>{{ guest_count }}</strong><small>Registered hotel guests</small></div>
+  <div class="stat-card"><span>Staff</span><strong>{{ staff_count }}</strong><small>Staff records</small></div>
+  <div class="stat-card"><span>Services</span><strong>{{ service_count }}</strong><small>Hotel services configured</small></div>
+  <div class="stat-card"><span>Unpaid bills</span><strong>{{ unpaid_bills }}</strong><small>Require payment follow-up</small></div>
+</div>
+
+<section class="management-section">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">Control centre</span>
+      <h2>Manage hotel pages</h2>
+    </div>
+  </div>
+  <div class="management-grid">
+    <a href="{% url 'guest' %}"><b>Guests</b><span>View and manage guest records</span></a>
+    <a href="{% url 'staff' %}"><b>Staff</b><span>Manage employee information</span></a>
+    <a href="{% url 'roomtype' %}"><b>Room types</b><span>Configure room categories and rates</span></a>
+    <a href="{% url 'room' %}"><b>Rooms</b><span>Manage room inventory and status</span></a>
+    <a href="{% url 'reservation' %}"><b>Reservations</b><span>Confirm or cancel guest bookings</span></a>
+    <a href="{% url 'services' %}"><b>Services</b><span>Manage hotel services and costs</span></a>
+    <a href="{% url 'guestbill' %}"><b>Guest bills</b><span>Manage guest invoices</span></a>
+    <a href="{% url 'billdetails' %}"><b>Bill details</b><span>Manage billed services</span></a>
+    <a href="{% url 'payment' %}"><b>Payments</b><span>Track payment records</span></a>
+  </div>
+</section>
+
+<section class="management-section">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">Latest activity</span>
+      <h2>Recent reservations</h2>
+    </div>
+    <a class="btn btn-outline-dark btn-sm" href="{% url 'reservation' %}">View all</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table dashboard-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Guest</th>
+          <th>Room</th>
+          <th>Stay</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in recent_reservations %}
+        <tr>
+          <td>{{ item.reservation_id }}</td>
+          <td>{{ item.guest.first_name }} {{ item.guest.last_name }}</td>
+          <td>{{ item.room.room_number }}</td>
+          <td>{{ item.check_in_date }} – {{ item.check_out_date }}</td>
+          <td><span class="status-pill status-{{ item.status|lower }}">{{ item.status }}</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No reservations have been recorded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div>
+
+{% endblock %}
